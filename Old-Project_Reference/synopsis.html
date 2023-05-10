@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ranking of Kings</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+    <link rel="icon" href="images/tab-icon.png" />
+  </head>
+  <body>
+    <section class="sub-header">
+      <nav>
+        <a href="index.html"><img src="images/logo.png" /></a>
+        <div class="nav-links" id="navLinks">
+          <i class="fa fa-times" onclick="hideMenu()"></i>
+          <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="synopsis.html">SYNOPSIS</a></li>
+            <li><a href="characters.html">CHARACTERS</a></li>
+            <li><a href="blog.html">BLOG</a></li>
+            <li><a href="contact.html">CONTACT</a></li>
+          </ul>
+        </div>
+        <i class="fa fa-bars" onclick="showMenu()"></i>
+      </nav>
+      <h1>Synopsis</h1>
+    </section>
+
+    <!----- synopsis content ----->
+
+    <section class="synopsis">
+      <div class="row">
+        <div class="synopsis-col">
+          <h1>The Becoming of the Greatest King</h1>
+          <p>
+            The people of the kingdom look down on the young Prince Bojji, who
+            can neither hear nor speak. They call him "The Useless Prince" while
+            jeering at his supposed foolishness. However, while Bojji may not be
+            physically strong, he is certainly not weak of heart. When a chance
+            encounter with a shadow creature should have left him traumatized,
+            it instead makes him believe that he has found a friend amidst those
+            who only choose to notice his shortcomings. He starts meeting with
+            Kage, the shadow, regularly, to the point where even the otherwise
+            abrasive creature begins to warm up to him. Kage and Bojji's
+            unlikely friendship lays the budding foundations of the prince's
+            journey, one where he intends to conquer his fears and insecurities.
+            Despite the constant ridicule he faces, Bojji resolves to fulfill
+            his desire of becoming the best king he can be.
+          </p>
+          <a
+            target="_blank"
+            href="https://animixplay.to/v1/ousama-ranking"
+            class="hero-btn yellow-btn"
+            >VIEW EPISODES</a
+          >
+        </div>
+        <div class="synopsis-col">
+          <img src="images/synopsis.png" />
+        </div>
+      </div>
+    </section>
+
+    <!----- Footer ----->
+    <section class="footer">
+      <h4>-DISCLAIMER-</h4>
+      <p>
+        Submitted in Partial Fulfillment Of the Requirements for the Course
+        Introduction to Computing.<br />
+        This website is only made for the sole purpose of requirement
+        submission.
+      </p>
+      <div class="icons">
+        <a target="_blank" href="https://www.facebook.com/geo.moonlight.16">
+          <i class="fa fa-facebook"></i
+        ></a>
+        <a target="_blank" href="https://twitter.com/GeorlyBibas">
+          <i class="fa fa-twitter"></i
+        ></a>
+        <a target="_blank" href="https://www.instagram.com/jiov21/">
+          <i class="fa fa-instagram"></i
+        ></a>
+        <a
+          target="_blank"
+          href="https://www.linkedin.com/in/georly-bibas-039970228/"
+          ><i class="fa fa-linkedin"></i
+        ></a>
+      </div>
+      <p>Made with <i class="fa fa-heart-o"></i> by Georly Cuadro Bibas</p>
+    </section>
+
+    <!-----JavaScript for Toggle Menu----->
+    <script>
+      var navLinks = document.getElementById("navLinks");
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+  </body>
+</html>

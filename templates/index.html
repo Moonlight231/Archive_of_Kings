@@ -1,1 +1,70 @@
-<h1> Hello my name is {{first_name}}</h1>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archive of Kings</title>
+    <link rel="stylesheet" href="{{url_for('static', filename= '/style.css')}}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="static/font-awesome-4.7.0/css/font-awesome.min.css" />
+    <link rel="icon" href="{{url_for('static', filename= '/images/tab-icon.png')}}" />
+    
+    
+  </head>
+  <body>
+    <section class='header'>
+        <nav >
+            <a href="{{url_for('index')}}"><img src="{{url_for('static', filename= '/images/logo2.png')}}" /></a>
+          <div class="nav-links-index" id="navLinks">
+            <i class="fa fa-times" onclick="hideMenu()"></i>
+            <ul>
+              <li><a href="{{url_for('user', name='John')}}">USER PROFILE</a></li>
+              <li><a href="#">SYNOPSIS</a></li>
+              <li><a href="#">CHARACTERS</a></li>
+              <li><a href="#">BLOG</a></li>
+              <li><a href="#">CONTACT</a></li>s
+            </ul>
+          </div>
+          <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>
+
+        <div class="text-box">
+            <h1>Search Box Here</h1>
+            <p>
+              Upload study materials to help other students learn.<br />You'll be able to have free access for sharing your materials.
+            </p>
+            <a href="#" class="hero-btn">Read More</a>
+          </div>
+
+      </section>
+
+      
+  
+      <!--JavaScript for Toggle Menu-->
+      <script>
+        var navLinks = document.getElementById("navLinks");
+        function showMenu() {
+          navLinks.style.right = "0";
+        }
+        function hideMenu() {
+          navLinks.style.right = "-200px";
+        }
+      </script>
+    <br/>
+    
+
+  </body>
+</html>
+
+
+  
+{% block content %}
+ 
+    <h1> Hello my name is {{first_name}}</h1>
+
+{% endblock  %}

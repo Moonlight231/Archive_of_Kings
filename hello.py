@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 
+
 # Create a Flask Instance
 app = Flask (__name__)
 
@@ -25,7 +26,7 @@ def index():
 # localhost:5000/user/john
 @app.route('/user/<name>')
 def user(name):
-    return render_template("user.html", user_name=name)
+    return render_template("user.html", name=name)
 
 # Create Custom Error Pages
 

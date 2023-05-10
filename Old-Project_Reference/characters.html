@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ranking of Kings</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+    <link rel="icon" href="images/tab-icon.png" />
+  </head>
+  <body>
+    <section class="sub-header">
+      <nav>
+        <a href="index.html"><img src="images/logo.png" /></a>
+        <div class="nav-links" id="navLinks">
+          <i class="fa fa-times" onclick="hideMenu()"></i>
+          <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="synopsis.html">SYNOPSIS</a></li>
+            <li><a href="characters.html">CHARACTERS</a></li>
+            <li><a href="blog.html">BLOG</a></li>
+            <li><a href="contact.html">CONTACT</a></li>
+          </ul>
+        </div>
+        <i class="fa fa-bars" onclick="showMenu()"></i>
+      </nav>
+      <h1>Characters</h1>
+    </section>
+
+    <!----- characters ----->
+
+    <section class="characters">
+      <h1>Primary Characters</h1>
+      <p>
+        Primary characters are the big ones: the hero/protagonist, the
+        villain/antagonist, the main viewpoint character.<br />These are the
+        characters the reader identifies as the ones the story is about.
+      </p>
+
+      <div class="row">
+        <div class="characters-col">
+          <img src="images/Bojji.png" />
+          <h3>Bojji</h3>
+          <p>
+            The main protagonist of the story and the first prince of the
+            Kingdom of Bosse. Born deaf and tiny in size, he was ridiculed and
+            scorned openly by many within the palace and kingdom. Despite his
+            disability, Bojji dreams of becoming a strong king like his father
+            and always tries to maintain a smile in front of others. He is known
+            for his kindness, which has earned him many unexpected allies,
+            diligence, and intuition, which allows him to read lips and know
+            what people are saying. He also possesses extreme agility and
+            dodging ability unconventional for kings that tend to rely on
+            strength, and impervious to poison. Following Daida's coronation, he
+            and Kage set off on a journey.
+          </p>
+        </div>
+        <div class="characters-col">
+          <img src="images/Kage.png" />
+          <h3>Kage</h3>
+          <p>
+            A last surviving member of the shadow clan and Bojji's companion.
+            Born to a clan of assassins, Kage was a young child when he
+            witnessed his entire family murdered by the kingdom they served. He
+            subsequently escaped and was exploited by a thug, who eventually
+            sold him out for his ransom. Tempered by the rough way of the world,
+            Kage then grew up using his clan's abilities to make a living off
+            thieving. He eventually meets Bojji and is touched by his kindness
+            and his situation, pledging to be his faithful friend. He is tasked
+            by Bebin to follow and protect Bojji on their journey.
+          </p>
+        </div>
+        <div class="characters-col">
+          <img src="images/Daida.png" />
+          <h3>Daida</h3>
+          <p>
+            Bojji's younger half-brother, the birth son of Queen Hiling and the
+            current king. Like Bojji he is hardworking and resilient, but
+            possesses a streak of pride and arrogance in his strength that seems
+            to take after their father. Deep down, he is secretly jealous of his
+            brother, whom he believes was able to get everyone's love and the
+            position of king without any effort. In the time leading up to his
+            coronation, Daida is manipulated by a Magic Mirror and is forcibly
+            made the vessel for Bosse's reincarnation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="supporting-characters">
+      <h1>Supporting Characters</h1>
+      <p>
+        A supporting character is a character that is not the focus of the
+        primary storyline, but appears or is mentioned in the story enough<br />
+        to be more than just a minor character. Sometimes, supporting characters
+        may develop a complex backstory of their own,<br />
+        but this is usually in relation to the main character, rather than
+        entirely independently.
+      </p>
+
+      <div class="row">
+        <div class="supporting-characters-col">
+          <img src="images/Hiling.jpg" />
+          <div class="layer">
+            <h3>QUEEN HILING</h3>
+          </div>
+        </div>
+        <div class="supporting-characters-col">
+          <img src="images/Bosse.jpg" />
+          <div class="layer">
+            <h3>KING BOSSE</h3>
+          </div>
+        </div>
+        <div class="supporting-characters-col">
+          <img src="images/magic mirror.jpg" />
+          <div class="layer">
+            <h3>MAGIC MIRROR<br />/MIRANJO</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!----- Footer ----->
+    <section class="footer">
+      <h4>-DISCLAIMER-</h4>
+      <p>
+        Submitted in Partial Fulfillment Of the Requirements for the Course
+        Introduction to Computing.<br />
+        This website is only made for the sole purpose of requirement
+        submission.
+      </p>
+      <div class="icons">
+        <a target="_blank" href="https://www.facebook.com/geo.moonlight.16">
+          <i class="fa fa-facebook"></i
+        ></a>
+        <a target="_blank" href="https://twitter.com/GeorlyBibas">
+          <i class="fa fa-twitter"></i
+        ></a>
+        <a target="_blank" href="https://www.instagram.com/jiov21/">
+          <i class="fa fa-instagram"></i
+        ></a>
+        <a
+          target="_blank"
+          href="https://www.linkedin.com/in/georly-bibas-039970228/"
+          ><i class="fa fa-linkedin"></i
+        ></a>
+      </div>
+      <p>Made with <i class="fa fa-heart-o"></i> by Georly Cuadro Bibas</p>
+    </section>
+
+    <!-----JavaScript for Toggle Menu----->
+    <script>
+      var navLinks = document.getElementById("navLinks");
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+  </body>
+</html>

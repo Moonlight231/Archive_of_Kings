@@ -1,0 +1,63 @@
+<!--JavaScript for Toggle Menu
+    <section>
+      <nav >
+        <a href="{{url_for('index')}}"><img src="{{url_for('static', filename= '/images/logo2.png')}}" /></a>
+        <div class="nav-links" id="navLinks">
+          <i class="fa fa-times" onclick="hideMenu()"></i>
+          <ul>
+            <li><a href="#">HOME</a></li>
+            <li><a href="#">SYNOPSIS</a></li>
+            <li><a href="#">CHARACTERS</a></li>
+            <li><a href="#">BLOG</a></li>
+            <li><a href="#">CONTACT</a></li>
+          </ul>
+        </div>
+        <i class="fa fa-bars" onclick="showMenu()"></i>
+      </nav>
+
+    </section>
+
+    JavaScript for Toggle Menu
+    <script>
+      var navLinks = document.getElementById("navLinks");
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+
+    </script>
+
+-->
+
+
+      <nav>
+         <ul>
+            <li class="logo"> <a href="{{url_for('index')}}"> ARCHIVE of KINGS</a></li>
+            <li class="btn"><span class="fas fa-bars"></span></li>
+            <div class="items">
+               <li><a href="{{url_for('user', name='John')}}">User Profile</a></li>
+               <li><a href="#">About</a></li>
+               <li><a href="#">Services</a></li>
+               <li><a href="#">Contact</a></li>
+            </div>
+            <li class="search-icon">
+               <input type="search" placeholder="Search">
+               <label class="icon">
+               <span class="fas fa-search"></span>
+               </label>
+            </li>
+         </ul>
+      </nav>
+
+      {% block content %}
+
+      {% endblock %}
+      
+      <script>
+         $('nav ul li.btn span').click(function(){
+           $('nav ul div.items').toggleClass("show");
+           $('nav ul li.btn span').toggleClass("show");
+         });
+      </script>
