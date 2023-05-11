@@ -1,10 +1,8 @@
-{% extends 'base.html'%}
+{% extends 'base.html'%} {% block content %}
 
-{% block content %}
-
-    <br/>
-    <center>
-        <h1> Hello, {{name|capitalize}} !</h1>
-    </center>
+<br />
+<center>
+  <h1>Hello, {{name|title}} !</h1>
+</center>
 
 {% endblock %}

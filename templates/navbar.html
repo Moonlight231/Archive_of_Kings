@@ -1,37 +1,4 @@
-<!--JavaScript for Toggle Menu
-    <section>
-      <nav >
-        <a href="{{url_for('index')}}"><img src="{{url_for('static', filename= '/images/logo2.png')}}" /></a>
-        <div class="nav-links" id="navLinks">
-          <i class="fa fa-times" onclick="hideMenu()"></i>
-          <ul>
-            <li><a href="#">HOME</a></li>
-            <li><a href="#">SYNOPSIS</a></li>
-            <li><a href="#">CHARACTERS</a></li>
-            <li><a href="#">BLOG</a></li>
-            <li><a href="#">CONTACT</a></li>
-          </ul>
-        </div>
-        <i class="fa fa-bars" onclick="showMenu()"></i>
-      </nav>
-
-    </section>
-
-    JavaScript for Toggle Menu
-    <script>
-      var navLinks = document.getElementById("navLinks");
-      function showMenu() {
-        navLinks.style.right = "0";
-      }
-      function hideMenu() {
-        navLinks.style.right = "-200px";
-      }
-
-    </script>
-
--->
-
-
+<!---
       <nav>
          <ul>
             <li class="logo"> <a href="{{url_for('index')}}"> ARCHIVE of KINGS</a></li>
@@ -65,3 +32,44 @@
            $('nav ul li.btn span').toggleClass("show");
          });
       </script>
+    -->
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a
+      class="navbar-brand text-warning"
+      style="font-family: 'Colus'"
+      href="{{url_for('index')}}"
+      >Archive of Kings</a
+    >
+    <button
+      class="navbar-toggler btn-warning"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('user', name='John')}}"
+            >User Profile</a
+          >
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+        />
+        <button class="btn btn-outline-warning" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
