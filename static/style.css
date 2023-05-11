@@ -587,3 +587,8 @@ h3 {
   color: #fff;
   box-sizing: border-box;
 }
+
+.container{
+  padding-left: 50px;
+  padding-right: 50px;
+}

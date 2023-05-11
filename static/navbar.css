@@ -193,3 +193,8 @@ nav ul li.btn span.show:before{
   font-weight: 600;
   color: #202020;
 }
+
+.container{
+  padding-left: 50px;
+  padding-right: 50px;
+}
