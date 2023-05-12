@@ -1,29 +1,37 @@
 {% extends 'base.html'%}
 
-    
-{% block css %}
-    
-{% endblock %}
-
 {% block content %}
 
-    {% if name %}
 
-        <h1>Hello {{ name }}!! </h1>
+{%for message in get_flashed_messages()%}
 
-    {% else %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    Hey {{name}}, {{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
 
-        <h1>What's Your Name?</h1>
-        <br/>
-        <form method="POST">
-            {{ form.hidden_tag() }}
+  
+{%endfor%}
 
-            {{ form.name.label}}
-            {{form.name()}}
-            <br/>
-            {{ form.submit()}}
-        </form>
-        
-    {%endif%}
-    
+{% if name %}
+
+  <h1>Hello {{ name }}!!</h1>
+
+{% else %}
+
+  <h1>What's Your Name?</h1>
+  <p id = "demo"> THIS IS FUCKERY</p>
+
+  <script src = "{{url_for('static', filename='js/myfile.js')}}"></script>
+  <br />
+  <form method="POST">
+    {{ form.hidden_tag() }} {{ form.name.label(class="form-label")}}
+    {{form.name(class="form-control")}}
+    <br />
+    {{ form.submit(class="btn btn-warning")}}
+  </form>
+
+{%endif%}
+
 {% endblock %}
+ 
