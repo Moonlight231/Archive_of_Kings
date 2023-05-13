@@ -1,4 +1,7 @@
 from flask import Flask, render_template, flash, request, redirect, url_for
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError
+from wtforms.validators import DataRequired, EqualTo, Length
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -6,11 +9,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from datetime import datetime
 from datetime import date
-
+from wtforms.widgets import TextArea
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from os import path
-
-from webforms import LoginForm, PostForm, UserForm, PasswordForm, NamerForm
 
 
 
@@ -19,9 +20,7 @@ app = Flask (__name__)
 
 # Secret Key!
 app.config['SECRET_KEY'] = "moonlight"
-
 # Add Database
-
 # OLD SQLite db
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
@@ -41,6 +40,11 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return Users.query.get(int(user_id))
 
+#Create Login Form
+class LoginForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    submit = SubmitField("Login")
 
 # Create Login Page
 @app.route('/login', methods=['GET', 'POST'])
@@ -76,8 +80,24 @@ def dashboard():
     return render_template('dashboard.html')
 
 
+# Create a Library Post Model
+class Posts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
+    content = db.Column((db.Text))
+    author = db.Column((db.String(255)))
+    date_posted = db.Column(db.DateTime, default= datetime.utcnow)
+    slug = db.Column(db.String(255))
+
+# Create a Posts Form
+class PostForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    content = StringField("Content", validators=[DataRequired()], widget=TextArea())
+    author = StringField("Author", validators=[DataRequired()])
+    slug = StringField("Slug", validators=[DataRequired()])
+    submit = SubmitField("Post")
+
 @app.route('/posts/delete/<int:id>')
-@login_required
 def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
     
@@ -136,8 +156,7 @@ def add_post():
     form = PostForm()
     
     if form.validate_on_submit():
-        poster = current_user.id
-        post = Posts(title=form.title.data, content=form.content.data, author=form.author.data, poster_id=poster, slug=form.slug.data)
+        post = Posts(title=form.title.data, content=form.content.data, author=form.author.data, slug=form.slug.data)
         # Clear the Form
         form.title.data = ''
         form.content.data = ''
@@ -162,6 +181,43 @@ def get_current_date():
     return {"Date": datetime.today()}
 
 
+
+#Create Model
+class Users(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), nullable=False, unique=True)
+    name = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    favorite_color = db.Column(db.String(120))
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)
+    # Do some password stuff!
+    password_hash = db.Column(db.String((128)))
+    
+    @property
+    def password(self):
+        raise AttributeError('Password is not a readable attribute!')
+    
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+    
+    # Create a String
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
+# Create a User Class
+class UserForm(FlaskForm):
+    name = StringField("Name", validators=[DataRequired()])
+    username = StringField("Username", validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired()])
+    favorite_color = StringField("Favorite Color")
+    password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
+    password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
 # Delete User Reccord
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -182,7 +238,6 @@ def delete(id):
 
 # Update Database Record
 @app.route('/update/<int:id>', methods = ['GET', 'POST'])
-@login_required
 def update(id):
     form = UserForm()
     name_to_update = Users.query.get_or_404(id)
@@ -201,6 +256,18 @@ def update(id):
     else:
         return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
 
+# Create a Password Class
+class PasswordForm(FlaskForm):
+    email = StringField("What's Your Email?", validators=[DataRequired()])
+    password_hash = PasswordField("What's Your Password?", validators=[DataRequired()])
+    submit = SubmitField("Login")
+    
+# Create a Form Class
+class NamerForm(FlaskForm):
+    name = StringField("What's Your Name", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+
 
 #def index():
 #    return "<h1>Hello World!</h1>"
@@ -213,6 +280,9 @@ def update(id):
 #title
 #trim
 #striptags
+
+
+
 
 # Create a Route Decorator
 @app.route('/')
@@ -297,44 +367,3 @@ def add_user():
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", form=form, name=name, our_users=our_users)
 
-
-# Create a Library Post Model
-class Posts(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255))
-    content = db.Column((db.Text))
-    author = db.Column((db.String(255)))
-    date_posted = db.Column(db.DateTime, default= datetime.utcnow)
-    slug = db.Column(db.String(255))
-    # Foreign Key to Link Users (refer to primary key of the user)
-    poster_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    
-
-
-#Create Model
-class Users(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
-    name = db.Column(db.String(200), nullable=False)
-    email = db.Column(db.String(120), nullable=False, unique=True)
-    favorite_color = db.Column(db.String(120))
-    date_added = db.Column(db.DateTime, default=datetime.utcnow)
-    # Do some password stuff!
-    password_hash = db.Column(db.String((128)))
-    # User can have many posts
-    posts = db.relationship('Posts', backref='poster')
-    
-    @property
-    def password(self):
-        raise AttributeError('Password is not a readable attribute!')
-    
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
-    
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
-    
-    # Create a String
-    def __repr__(self):
-        return '<Name %r>' % self.name
