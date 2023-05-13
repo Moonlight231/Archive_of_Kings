@@ -19,9 +19,9 @@
     <br/>
 
     <div class="card">
-        <h5 class="card-header">{{current_user.name}}</h5>
+        <h4 class="card-header text-light">{{current_user.name}}</h4>
         <div class="card-body">
-          <h5 class="card-title">Welcome To Your User Dashboard!</h5>
+          <h5 class="card-title text-secondary">Welcome To Your Dashboard!</h5>
           <p class="card-text"><strong>Name: </strong>{{current_user.name}}<br/>
             <strong>Username: </strong>{{current_user.username}}<br/>
             <strong>User Id: </strong>{{current_user.id}}<br/>
@@ -30,6 +30,8 @@
             <strong>Date Joined: </strong>{{current_user.date_added}}<br/>
         </p>
           <a href="{{url_for('logout')}}" class="btn btn-secondary btn-sm">Logout</a>
+          <a href="{{url_for('update', id=current_user.id)}}"class="btn btn-warning btn-sm">Update Profile</a>
+          <a href="{{url_for('delete', id=current_user.id)}}" class="btn btn-danger btn-sm">Delete</a>
         </div>
     </div>
 

@@ -44,7 +44,7 @@ def load_user(user_id):
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Login")
 
 # Create Login Page
 @app.route('/login', methods=['GET', 'POST'])
@@ -69,7 +69,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("You Have Been Logged Out! Thanks For Stopping By.")
+    flash("You Have Been Logged Out!")
     return redirect(url_for('login'))
 
 
@@ -95,7 +95,7 @@ class PostForm(FlaskForm):
     content = StringField("Content", validators=[DataRequired()], widget=TextArea())
     author = StringField("Author", validators=[DataRequired()])
     slug = StringField("Slug", validators=[DataRequired()])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Post")
 
 @app.route('/posts/delete/<int:id>')
 def delete_post(id):
@@ -128,6 +128,7 @@ def post(id):
     return render_template('post.html', post=post)
 
 @app.route('/posts/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_post(id):
     post = Posts.query.get_or_404(id)
     form = PostForm()
@@ -244,10 +245,11 @@ def update(id):
         name_to_update.name = request.form['name']
         name_to_update.email = request.form['email']
         name_to_update.favorite_color = request.form['favorite_color']
+        name_to_update.username = request.form['username']
         try:
             db.session.commit()
             flash("User Updated Successfully!")
-            return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
+            return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id)
         except:
             flash("Error! Looks like there was a problem... Try Again.")
             return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
@@ -258,7 +260,7 @@ def update(id):
 class PasswordForm(FlaskForm):
     email = StringField("What's Your Email?", validators=[DataRequired()])
     password_hash = PasswordField("What's Your Password?", validators=[DataRequired()])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Login")
     
 # Create a Form Class
 class NamerForm(FlaskForm):
