@@ -10,7 +10,7 @@ from datetime import date
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from os import path
 
-from webforms import LoginForm, PostForm, UserForm, PasswordForm, NamerForm
+from webforms import LoginForm, PostForm, UserForm, PasswordForm, NamerForm, SearchForm
 
 
 
@@ -41,6 +41,27 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return Users.query.get(int(user_id))
 
+# Pass Stuff to Navbar
+@app.context_processor
+def base():
+    form = SearchForm()
+    return dict(form=form)
+
+
+# Create Search Function
+@app.route('/search', methods=['POST'])
+def search():
+    form = SearchForm()
+    posts = Posts.query
+    if form.validate_on_submit():
+        # Get data from submitted form
+        post.searched = form.searched.data
+        # Query the database
+        posts = posts.filter(Posts.content.like('%' + post.searched + '%'))
+        posts = posts.order_by(Posts.title).all()
+        
+        
+        return render_template("search.html", form=form, searched=post.searched, posts=posts)
 
 # Create Login Page
 @app.route('/login', methods=['GET', 'POST'])
@@ -80,20 +101,29 @@ def dashboard():
 @login_required
 def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
+    id = current_user.id
     
-    try:
-        db.session.delete(post_to_delete)
-        db.session.commit()
-        
+    if id ==post_to_delete.poster.id:
+        try:
+            db.session.delete(post_to_delete)
+            db.session.commit()
+            
+            # Return a Message
+            flash("Post was Deleted!")
+            
+            # Grab all posts from the database
+            posts = Posts.query.order_by(Posts.date_posted)
+            return render_template("posts.html", posts=posts)
+            
+        except:
+            flash("Whoops! There was a problem deleting post. Try Again!")
+    else:
         # Return a Message
-        flash("Post was Deleted!")
-        
+        flash("You are Not Authorized to Delete That Post!")
+            
         # Grab all posts from the database
         posts = Posts.query.order_by(Posts.date_posted)
         return render_template("posts.html", posts=posts)
-        
-    except:
-        flash("Whoops! There was a problem deleting post. Try Again!")
     
 
 @app.route('/posts')
@@ -124,11 +154,17 @@ def edit_post(id):
         flash("Post Has Been Updated")
         return redirect(url_for('post', id=post.id))
     
-    form.title.data = post.title
-    form.author.data = post.author
-    form.slug.data = post.slug
-    form.content.data = post.content
-    return render_template('edit_post.html', form=form)
+    if current_user.id == post.poster_id:
+        form.title.data = post.title
+        form.author.data = post.author
+        form.slug.data = post.slug
+        form.content.data = post.content
+        return render_template('edit_post.html', form=form)
+    
+    else:
+        flash("You are Not Authorized to Edit This Post")
+        posts = Posts.query.order_by(Posts.date_posted)
+        return render_template("posts.html", posts=posts)
 
 # Add Post Page
 @app.route('/add-post', methods=['GET', 'POST'])
