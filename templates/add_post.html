@@ -45,6 +45,10 @@
       {{ form.submit(class="btn btn-warning")}}
 
     </form>
+    {{ckeditor.load()}}
+    {{ckeditor.config(name='content')}}
+
+
     </div>
 
 {%else%}

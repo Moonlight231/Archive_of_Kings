@@ -11,11 +11,13 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, log
 from os import path
 
 from webforms import LoginForm, PostForm, UserForm, PasswordForm, NamerForm, SearchForm
-
+from flask_ckeditor import CKEditor
 
 
 # Create a Flask Instance
 app = Flask (__name__)
+# Add CKEditor
+ckeditor = CKEditor(app)
 
 # Secret Key!
 app.config['SECRET_KEY'] = "moonlight"

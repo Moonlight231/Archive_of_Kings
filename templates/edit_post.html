@@ -13,7 +13,7 @@
   
 {%endfor%}
 
-<h1>Posts...</h1>
+<h1>Edit Post...</h1>
 <br/>
 
     <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
@@ -45,6 +45,8 @@
             {{ form.submit(class="btn btn-warning")}}
       
           </form>
+          {{ckeditor.load()}}
+          {{ckeditor.config( name='content')}}
     
     </div>
 
