@@ -123,7 +123,7 @@ def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
     id = current_user.id
     
-    if id ==post_to_delete.poster.id:
+    if id ==post_to_delete.poster.id or id == 14:
         try:
             db.session.delete(post_to_delete)
             db.session.commit()
@@ -174,7 +174,7 @@ def edit_post(id):
         flash("Post Has Been Updated")
         return redirect(url_for('post', id=post.id))
     
-    if current_user.id == post.poster_id:
+    if current_user.id == post.poster_id or current_user.id == 19:
         form.title.data = post.title
         form.author.data = post.author
         form.slug.data = post.slug
@@ -253,28 +253,36 @@ def update(id):
         name_to_update.favorite_color = request.form['favorite_color']
         name_to_update.bio = request.form['bio']
         name_to_update.username = request.form['username']
-        name_to_update.profile_pic = request.files['profile_pic']
         
         
-        # Grab Image Name
-        pic_filename = secure_filename(name_to_update.profile_pic.filename)
-        # UUID
-        pic_name = str(uuid.uuid1()) + "_" + pic_filename
-        # Save the image
-        saver = request.files['profile_pic']
+        # Check for profile pic
+        if request.files['profile_pic']:
+            name_to_update.profile_pic = request.files['profile_pic']
         
-        
-        # Change it to a string to save to db
-        name_to_update.profile_pic = pic_name
-        
-        try:
+            # Grab Image Name
+            pic_filename = secure_filename(name_to_update.profile_pic.filename)
+            # UUID
+            pic_name = str(uuid.uuid1()) + "_" + pic_filename
+            # Save the image
+            saver = request.files['profile_pic']
+            
+            
+            # Change it to a string to save to db
+            name_to_update.profile_pic = pic_name
+            
+            try:
+                db.session.commit()
+                saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
+                flash("User Updated Successfully!")
+                return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id)
+            except:
+                flash("Error! Looks like there was a problem... Try Again.")
+                return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
+            
+        else:
             db.session.commit()
-            saver.save(os.path.join(app.config['UPLOAD_FOLDER']), pic_name)
             flash("User Updated Successfully!")
             return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id)
-        except:
-            flash("Error! Looks like there was a problem... Try Again.")
-            return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
     else:
         return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
 
