@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError, TextAreaField
 from wtforms.validators import DataRequired, EqualTo, Length
 from wtforms.widgets import TextArea
 from flask_ckeditor import CKEditorField
+from flask_wtf.file import FileField
 
 
 # Create a SearchForm
@@ -32,8 +33,10 @@ class UserForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
     favorite_color = StringField("Favorite Color")
+    bio = TextAreaField("Bio")
     password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
     password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
+    profile_pic = FileField()
     submit = SubmitField("Submit")
 
 # Create a Password Class

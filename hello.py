@@ -8,10 +8,13 @@ from datetime import datetime
 from datetime import date
 
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from os import path
+
 
 from webforms import LoginForm, PostForm, UserForm, PasswordForm, NamerForm, SearchForm
 from flask_ckeditor import CKEditor
+from werkzeug.utils import secure_filename
+import uuid as uuid
+import os 
 
 
 # Create a Flask Instance
@@ -31,6 +34,10 @@ app.config['SECRET_KEY'] = "moonlight"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost/our_users'
 
 # Initialize the Database
+
+UPLOAD_FOLDER = 'static/images/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 db =  SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -48,6 +55,17 @@ def load_user(user_id):
 def base():
     form = SearchForm()
     return dict(form=form)
+
+# Create Admin Page
+@app.route('/admin')
+@login_required
+def admin():
+    id = current_user.id
+    if id == 19:
+        return render_template("admin.html")
+    else:
+        flash("You must be the Admin to access this page!")
+        return redirect(url_for('dashboard'))
 
 
 # Create Search Function
@@ -228,9 +246,25 @@ def update(id):
         name_to_update.name = request.form['name']
         name_to_update.email = request.form['email']
         name_to_update.favorite_color = request.form['favorite_color']
+        name_to_update.bio = request.form['bio']
         name_to_update.username = request.form['username']
+        name_to_update.profile_pic = request.files['profile_pic']
+        
+        
+        # Grab Image Name
+        pic_filename = secure_filename(name_to_update.profile_pic.filename)
+        # UUID
+        pic_name = str(uuid.uuid1()) + "_" + pic_filename
+        # Save the image
+        saver = request.files['profile_pic']
+        
+        
+        # Change it to a string to save to db
+        name_to_update.profile_pic = pic_name
+        
         try:
             db.session.commit()
+            saver.save(os.path.join(app.config['UPLOAD_FOLDER']), pic_name)
             flash("User Updated Successfully!")
             return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id)
         except:
@@ -356,7 +390,9 @@ class Users(db.Model, UserMixin):
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     favorite_color = db.Column(db.String(120))
+    bio = db.Column(db.Text(500), nullable=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
+    profile_pic = db.Column(db.String(500), nullable=True)
     # Do some password stuff!
     password_hash = db.Column(db.String((128)))
     # User can have many posts
