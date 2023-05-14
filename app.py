@@ -14,7 +14,8 @@ from webforms import LoginForm, PostForm, UserForm, PasswordForm, NamerForm, Sea
 from flask_ckeditor import CKEditor
 from werkzeug.utils import secure_filename
 import uuid as uuid
-import os 
+import os
+from sqlalchemy.sql import exists
 
 
 # Create a Flask Instance
@@ -82,6 +83,12 @@ def search():
         
         
         return render_template("search.html", form=form, searched=post.searched, posts=posts)
+    
+    else:
+    
+        post.searched = " "
+        return render_template("search.html", form=form, searched=post.searched, posts=posts)
+    
 
 # Create Login Page
 @app.route('/login', methods=['GET', 'POST'])
@@ -107,7 +114,7 @@ def login():
 def logout():
     logout_user()
     flash("You Have Been Logged Out!")
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 
 # Create Dashboard Page
@@ -123,13 +130,13 @@ def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
     id = current_user.id
     
-    if id ==post_to_delete.poster.id or id == 14:
+    if id ==post_to_delete.poster.id or id == 19:
         try:
             db.session.delete(post_to_delete)
             db.session.commit()
             
             # Return a Message
-            flash("Post was Deleted!")
+            flash("Material was Deleted!")
             
             # Grab all posts from the database
             posts = Posts.query.order_by(Posts.date_posted)
@@ -153,9 +160,11 @@ def posts():
     return render_template("posts.html", posts=posts)
 
 @app.route('/posts/<int:id>')
+@login_required
 def post(id):
+    exist = db.session.query(exists().where(Posts.poster_id == current_user.id)).scalar()
     post = Posts.query.get_or_404(id)
-    return render_template('post.html', post=post)
+    return render_template('post.html', post=post, exist=exist)
 
 @app.route('/posts/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -250,7 +259,7 @@ def update(id):
     if request.method == "POST":
         name_to_update.name = request.form['name']
         name_to_update.email = request.form['email']
-        name_to_update.favorite_color = request.form['favorite_color']
+        name_to_update.program = request.form['program']
         name_to_update.bio = request.form['bio']
         name_to_update.username = request.form['username']
         
@@ -364,21 +373,25 @@ def add_user():
     name = None
     form = UserForm()
     if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data).first()
-        if user is None:
+        uemail = Users.query.filter_by(email=form.email.data).first()
+        uname = Users.query.filter_by(username=form.username.data).first()
+        if uemail is None and uname is None:
             # Hash the Password!
             hashed_pw = generate_password_hash(form.password_hash.data, "sha256")
-            user =  Users(name=form.name.data, username=form.username.data, email=form.email.data, favorite_color=form.favorite_color.data, password_hash=hashed_pw)
+            user =  Users(name=form.name.data, username=form.username.data, email=form.email.data, program=form.program.data, password_hash=hashed_pw)
             db.session.add(user)
             db.session.commit()
-        name = form.name.data
-        form.name.data = ''
-        form.username.data = ''
-        form.email.data = ''
-        form.favorite_color.data = ''
-        form.password_hash.data = ''
         
-        flash("User Added Successfully!")
+            name = form.name.data
+            form.name.data = ''
+            form.username.data = ''
+            form.email.data = ''
+            form.program.data = ''
+            form.password_hash.data = ''
+            flash("Registration Complete!")
+        else:
+            flash("Email or Username already exist! Please Try Again.")
+            form.email.data = ''
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", form=form, name=name, our_users=our_users)
 
@@ -389,8 +402,9 @@ class Posts(db.Model):
     title = db.Column(db.String(255))
     content = db.Column((db.Text))
     author = db.Column((db.String(255)))
-    date_posted = db.Column(db.DateTime, default= datetime.utcnow)
+    date_posted = db.Column(db.DateTime, default= datetime.now)
     slug = db.Column(db.String(255))
+    
     # Foreign Key to Link Users (refer to primary key of the user)
     poster_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
@@ -402,9 +416,9 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
-    favorite_color = db.Column(db.String(120))
+    program = db.Column(db.String(120))
     bio = db.Column(db.Text(500), nullable=True)
-    date_added = db.Column(db.DateTime, default=datetime.utcnow)
+    date_added = db.Column(db.DateTime, default=datetime.now)
     profile_pic = db.Column(db.String(500), nullable=True)
     # Do some password stuff!
     password_hash = db.Column(db.String((128)))

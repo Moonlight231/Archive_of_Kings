@@ -24,7 +24,7 @@ class PostForm(FlaskForm):
     content = CKEditorField('Content', validators=[DataRequired()])
 
     author = StringField("Author", validators=[DataRequired()])
-    slug = StringField("Slug", validators=[DataRequired()])
+    slug = StringField("Document Type", validators=[DataRequired()])
     submit = SubmitField("Post")
 
 # Create a User Class
@@ -32,7 +32,7 @@ class UserForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     username = StringField("Username", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
-    favorite_color = StringField("Favorite Color")
+    program = StringField("Program")
     bio = TextAreaField("Bio")
     password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
     password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])

@@ -9,18 +9,19 @@
 
     {%if posts%}
 
-        {%for post in posts%}
+        {%for post in posts[::-1]%}
         <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
 
-            <h2><a href="{{url_for('post', id=post.id)}}">{{post.title}}</a></h2>
-            <small>Author: {{post.author}}</small><br/>
-            <small>Uploaded By: {{post.poster.name}}</small><br/>
-            {{post.date_posted}}<br/><br/>
-            {{post.content|safe}}
+            <h2><a href="{{url_for('post', id=post.id)}}" class="link-light" style="text-decoration: none" >{{post.title}}</a></h2>
+            <small><strong>Author: {{post.author}}</strong></small><br/>
+            <small><em>Uploaded By: {{post.poster.name}}</em></small><br/>
+            {{post.date_posted}}
+            
+            <!-- <br/><br/> {{post.content|safe}}-->
             <br/><br/>
-            <a href="{{url_for('post', id=post.id)}}" class="btn btn-outline-warning btn-sm">View Post</a>
-        
-            {%if post.poster_id == current_user.id%}
+            <a href="{{url_for('post', id=post.id)}}"  class="btn btn-outline-warning btn-sm">View Post</a>
+
+            {%if post.poster_id == current_user.id or current_user.id == 19%}
                 <a href="{{url_for('edit_post', id=post.id)}}" class="btn btn-outline-warning btn-sm">Edit Post</a>
                 <a href="{{url_for('delete_post', id=post.id)}}" class="btn btn-outline-danger btn-sm">Delete Post</a>
             {%endif%}

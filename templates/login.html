@@ -4,32 +4,33 @@
 
 {%if current_user.is_authenticated%}
 
-    {%for message in get_flashed_messages()%}
+        {%for message in get_flashed_messages()%}
 
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{message}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
 
-    {%endfor%}
+        {%endfor%}
 
     {%else%}
 
-    {%for message in get_flashed_messages()%}
+        {%for message in get_flashed_messages()%}
 
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{message}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
 
-    {%endfor%}
-
-
-    {%endif%}
+        {%endfor%}
 
 
-    <h1>Login!</h1>
-    <br/><br/><br/>
+{%endif%}
+
+
+  <br/><br/><br/>
+  <h1>    Login:</h1>
+    <br/>
 
 
   <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
