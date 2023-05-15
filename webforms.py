@@ -24,7 +24,7 @@ class PostForm(FlaskForm):
     content = CKEditorField('Content', validators=[DataRequired()])
 
     author = StringField("Author", validators=[DataRequired()])
-    slug = StringField("Document Type", validators=[DataRequired()])
+    doc_type = StringField("Document Type", validators=[DataRequired()])
     submit = SubmitField("Post")
 
 # Create a User Class

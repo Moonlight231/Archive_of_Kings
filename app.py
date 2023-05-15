@@ -174,7 +174,7 @@ def edit_post(id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.author = form.author.data
-        post.slug = form.slug.data
+        post.doc_type = form.doc_type.data
         post.content = form.content.data
         # Update Database
         db.session.add(post)
@@ -186,7 +186,7 @@ def edit_post(id):
     if current_user.id == post.poster_id or current_user.id == 19:
         form.title.data = post.title
         form.author.data = post.author
-        form.slug.data = post.slug
+        form.doc_type.data = post.doc_type
         form.content.data = post.content
         return render_template('edit_post.html', form=form)
     
@@ -202,12 +202,12 @@ def add_post():
     
     if form.validate_on_submit():
         poster = current_user.id
-        post = Posts(title=form.title.data, content=form.content.data, author=form.author.data, poster_id=poster, slug=form.slug.data)
+        post = Posts(title=form.title.data, content=form.content.data, author=form.author.data, poster_id=poster, doc_type=form.doc_type.data)
         # Clear the Form
         form.title.data = ''
         form.content.data = ''
         form.author.data = ''
-        form.slug.data = ''
+        form.doc_type.data = ''
         
         # Add Post Data to Database
         db.session.add(post)
@@ -396,15 +396,14 @@ def add_user():
     return render_template("add_user.html", form=form, name=name, our_users=our_users)
 
 
-# Create a Library Post Model
+# Create a Archive Post Model
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     content = db.Column((db.Text))
     author = db.Column((db.String(255)))
     date_posted = db.Column(db.DateTime, default= datetime.now)
-    slug = db.Column(db.String(255))
-    
+    doc_type = db.Column(db.String(255))
     # Foreign Key to Link Users (refer to primary key of the user)
     poster_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
@@ -418,7 +417,7 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(120), nullable=False, unique=True)
     program = db.Column(db.String(120))
     bio = db.Column(db.Text(500), nullable=True)
-    date_added = db.Column(db.DateTime, default=datetime.now)
+    date_added = db.Column(db.DateTime, default=date.today)
     profile_pic = db.Column(db.String(500), nullable=True)
     # Do some password stuff!
     password_hash = db.Column(db.String((128)))
