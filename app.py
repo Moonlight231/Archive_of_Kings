@@ -123,7 +123,8 @@ def logout():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    posts = Posts.query.order_by(Posts.date_posted)
+    return render_template('dashboard.html', posts=posts)
 
 
 @app.route('/posts/delete/<int:id>')
@@ -323,7 +324,7 @@ def update(id):
                 db.session.commit()
                 saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
                 flash("User Updated Successfully!")
-                return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id)
+                return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id, posts=posts)
             except:
                 flash("Error! Looks like there was a problem... Try Again.")
                 return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
@@ -331,7 +332,7 @@ def update(id):
         else:
             db.session.commit()
             flash("User Updated Successfully!")
-            return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id)
+            return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id, posts=posts)
     else:
         return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
 
@@ -459,7 +460,7 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(120), nullable=False, unique=True)
     program = db.Column(db.String(120))
     bio = db.Column(db.Text(500), nullable=True)
-    date_added = db.Column(db.DateTime, default=date.today)
+    date_added = db.Column(db.DateTime, default=datetime.now)
     profile_pic = db.Column(db.String(500), nullable=True)
     # Do some password stuff!
     password_hash = db.Column(db.String((128)))

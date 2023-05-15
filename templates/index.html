@@ -69,11 +69,8 @@
         <p>
           Upload study materials to help other students learn.<br />You'll be able to have free access for sharing your materials.
         </p>
-        {%if current_user.is_authenticated%}
-        <a href="{{url_for('add_user')}}" class="hero-btn">JOIN US</a>
-        {%else%}
+        
         <a href="{{url_for('posts')}}" class="hero-btn">VISIT ARCHIVE</a>
-        {%endif%}
         
       </div>
     </section>
@@ -309,7 +306,7 @@
           ><i class="fa fa-linkedin"></i
         ></a>
       </div>
-      <p>Made with <i class="fa fa-heart-o"></i> by Georly Cuadro Bibas</p>
+      <p>Made with <i class="fa fa-heart-o"></i> by Geo Cuadro Bibas</p>
     </section>
   
 
