@@ -18,7 +18,7 @@
 
     <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
 
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
 
             {{ form.hidden_tag() }}
       
@@ -32,17 +32,22 @@
             {{form.author(class="form-control")}}
             <br />
       
-            {{ form.slug.label(class="form-label")}}
+            {{ form.doc_type.label(class="form-label")}}
       
-            {{form.slug(class="form-control")}}
+            {{form.doc_type(class="form-control")}}
             <br />
       
             {{ form.content.label(class="form-label")}}
       
             {{form.content(class="form-control", rows="10")}}
             <br />
+
+            {{ form.file_attachment.label(class="form-label")}}
+
+            {{form.file_attachment(class="form-control", rows="10")}}
+            <br />
       
-            {{ form.submit(class="btn btn-warning")}}
+            {{ form.submit(class="btn btn-warning")}}<br/><br/>
       
           </form>
           {{ckeditor.load()}}
@@ -51,6 +56,7 @@
     </div>
 
     <a href="{{url_for('posts')}}" class="btn btn-outline-warning btn-sm">Back to Posts</a>
+    <br /><br /><br /><br />
 
 
 {% endblock %}

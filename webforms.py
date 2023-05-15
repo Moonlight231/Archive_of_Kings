@@ -9,7 +9,7 @@ from flask_wtf.file import FileField
 # Create a SearchForm
 class SearchForm(FlaskForm):
     searched = StringField("Searched", validators=[DataRequired()])
-    submit = SubmitField("Login")
+    submit = SubmitField("Search")
 
 #Create Login Form
 class LoginForm(FlaskForm):
@@ -25,7 +25,8 @@ class PostForm(FlaskForm):
 
     author = StringField("Author", validators=[DataRequired()])
     doc_type = StringField("Document Type", validators=[DataRequired()])
-    submit = SubmitField("Post")
+    file_attachment = FileField("Attach File")
+    submit = SubmitField("Upload")
 
 # Create a User Class
 class UserForm(FlaskForm):
@@ -36,7 +37,7 @@ class UserForm(FlaskForm):
     bio = TextAreaField("Bio")
     password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
     password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
-    profile_pic = FileField()
+    profile_pic = FileField("Profile Picture")
     submit = SubmitField("Submit")
 
 # Create a Password Class

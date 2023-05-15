@@ -18,7 +18,7 @@
 <h1>Upload:</h1>
   <br />
   <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-    <form action="{{ url_for('add_post')}}" method="POST">
+    <form action="{{ url_for('add_post')}}" method="POST" enctype="multipart/form-data">
 
       {{ form.hidden_tag() }}
 
@@ -40,6 +40,11 @@
       {{ form.content.label(class="form-label")}}
 
       {{form.content(class="form-control", rows="10")}}
+      <br />
+
+      {{ form.file_attachment.label(class="form-label")}}
+
+      {{form.file_attachment(class="form-control", rows="10")}}
       <br />
 
       {{ form.submit(class="btn btn-warning")}}

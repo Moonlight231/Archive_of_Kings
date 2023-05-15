@@ -5,7 +5,7 @@
 
 {%for message in get_flashed_messages()%}
 
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
     {{message}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
@@ -18,13 +18,22 @@
     <h1>{{post.title}}</h1>
     <br/>
 
-    <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    
+      <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    
 
         <!--<h2>{{post.title}}</h2>-->
-        <small><strong>Author: {{post.author}}</small></strong><br/>
-        <small><em>Uploaded By: {{post.poster.name}}</em></small><br/>
-        {{post.date_posted}}<br/><br/>
+        <small><strong><em>Author: {{post.author}}</em></small></strong><br/>
+        <small><em>Uploaded By: {{post.poster.name}}</em></small><br/><br/>
+        <em><small>Document Type: <strong>{{post.doc_type}}</strong></small><br/>
+        <small>File Attachment: <strong>{{post.file_attachment}}</strong></small><br/>
+        <small>{{post.date_posted}}</small></em><br/><br/><br/><br/>
         {{post.content|safe}}<br/><br/>
+
+        {%if post.file_attachment%}
+        <a href="{{url_for('download', file = post.file_attachment)}}" class="btn btn-success btn-sm">Download Attachment</a>
+        <br/><br/>
+        {%endif%}
 
         <div class="card mb-3">
           <div class="row no-gutters">

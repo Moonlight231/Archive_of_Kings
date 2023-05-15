@@ -116,6 +116,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    flash("You Have Been Logged Out!")
     return redirect(url_for('index'))
 
 
@@ -180,16 +181,15 @@ def edit_post(id):
         post.content = form.content.data
         post.file_attachment = form.file_attachment.data
         upload = request.files['file_attachment']
-        if upload:  
-            # Grab Attachment Name
-            af_filename = secure_filename(upload.filename)
-            # Set UUID
-            attachment_name = str(uuid.uuid1()) + "_" + af_filename
-            # Save that Attachment
-            post.file_attachment.save(os.path.join(app.config['ATTACHMENT_FOLDER'], attachment_name))
-            # Change it to a String to save to db
-            post.file_attachment=attachment_name
-    
+        # Grab Attachment Name
+        af_filename = secure_filename(upload.filename)
+        # Set UUID
+        attachment_name = str(uuid.uuid1()) + "_" + af_filename
+        # Save that Attachment
+        post.file_attachment.save(os.path.join(app.config['ATTACHMENT_FOLDER'], attachment_name))
+        # Change it to a String to save to db
+        post.file_attachment=attachment_name
+        
         try:
             # Update Database
             db.session.add(post)
@@ -221,15 +221,12 @@ def add_post():
     if form.validate_on_submit():
         poster = current_user.id
         upload = request.files['file_attachment']
-        attachment_name=None
-        if upload:
-            # Grab Attachment Name
-            af_filename = secure_filename(upload.filename)
-            # Set UUID
-            attachment_name = str(uuid.uuid1()) + "_" + af_filename
-            # Save that Attachment
-            form.file_attachment.data.save(os.path.join(app.config['ATTACHMENT_FOLDER'], attachment_name))
-        
+        # Grab Attachment Name
+        af_filename = secure_filename(upload.filename)
+        # Set UUID
+        attachment_name = str(uuid.uuid1()) + "_" + af_filename
+        # Save that Attachment
+        form.file_attachment.data.save(os.path.join(app.config['ATTACHMENT_FOLDER'], attachment_name))
         # Change it to a String to save to db
         post = Posts(title=form.title.data, content=form.content.data, author=form.author.data, poster_id=poster, doc_type=form.doc_type.data, file_attachment=attachment_name)
         
@@ -429,7 +426,6 @@ def add_user():
             form.program.data = ''
             form.password_hash.data = ''
             flash("Registration Complete!")
-            return redirect(url_for('login'))
         else:
             flash("Email or Username already exist! Please Try Again.")
             form.email.data = ''

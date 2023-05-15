@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, request, redirect, url_for, send_file
+from flask import Flask, render_template, flash, request, redirect, url_for
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -38,9 +38,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost/our
 
 UPLOAD_FOLDER = 'static/images/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-ATTACHMENT_FOLDER = 'static/attachments/'
-app.config['ATTACHMENT_FOLDER'] = ATTACHMENT_FOLDER
 
 db =  SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -116,6 +113,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    flash("You Have Been Logged Out!")
     return redirect(url_for('index'))
 
 
@@ -178,28 +176,12 @@ def edit_post(id):
         post.author = form.author.data
         post.doc_type = form.doc_type.data
         post.content = form.content.data
-        post.file_attachment = form.file_attachment.data
-        upload = request.files['file_attachment']
-        if upload:  
-            # Grab Attachment Name
-            af_filename = secure_filename(upload.filename)
-            # Set UUID
-            attachment_name = str(uuid.uuid1()) + "_" + af_filename
-            # Save that Attachment
-            post.file_attachment.save(os.path.join(app.config['ATTACHMENT_FOLDER'], attachment_name))
-            # Change it to a String to save to db
-            post.file_attachment=attachment_name
-    
-        try:
-            # Update Database
-            db.session.add(post)
-            db.session.commit()
-    
-            flash("Post Has Been Updated")
-            return redirect(url_for('post', id=post.id))
-        except:
-            flash("Something went wrong")
-            return redirect(url_for('post', id=post.id))
+        # Update Database
+        db.session.add(post)
+        db.session.commit()
+        
+        flash("Post Has Been Updated")
+        return redirect(url_for('post', id=post.id))
     
     if current_user.id == post.poster_id or current_user.id == 19:
         form.title.data = post.title
@@ -220,27 +202,12 @@ def add_post():
     
     if form.validate_on_submit():
         poster = current_user.id
-        upload = request.files['file_attachment']
-        attachment_name=None
-        if upload:
-            # Grab Attachment Name
-            af_filename = secure_filename(upload.filename)
-            # Set UUID
-            attachment_name = str(uuid.uuid1()) + "_" + af_filename
-            # Save that Attachment
-            form.file_attachment.data.save(os.path.join(app.config['ATTACHMENT_FOLDER'], attachment_name))
-        
-        # Change it to a String to save to db
-        post = Posts(title=form.title.data, content=form.content.data, author=form.author.data, poster_id=poster, doc_type=form.doc_type.data, file_attachment=attachment_name)
-        
-        
-        
+        post = Posts(title=form.title.data, content=form.content.data, author=form.author.data, poster_id=poster, doc_type=form.doc_type.data)
         # Clear the Form
         form.title.data = ''
         form.content.data = ''
         form.author.data = ''
         form.doc_type.data = ''
-        form.file_attachment.data = ''
         
         # Add Post Data to Database
         db.session.add(post)
@@ -258,13 +225,6 @@ def get_current_date():
     favorite_pizza = {"John": "Pepperoni", "Mary": "Cheese", "Tim": "Mushroom"}
     #return favorite_pizza
     return {"Date": datetime.today()}
-
-@app.route('/download/<file>')
-def download(file):
-    attachment = Posts.query.filter_by(file_attachment=file).first()
-    path = "./static/attachments/"
-    finalpath = path + str(attachment.file_attachment)
-    return send_file(finalpath, as_attachment=True)
 
 
 # Delete User Reccord
@@ -429,7 +389,6 @@ def add_user():
             form.program.data = ''
             form.password_hash.data = ''
             flash("Registration Complete!")
-            return redirect(url_for('login'))
         else:
             flash("Email or Username already exist! Please Try Again.")
             form.email.data = ''
@@ -445,7 +404,6 @@ class Posts(db.Model):
     author = db.Column((db.String(255)))
     date_posted = db.Column(db.DateTime, default= datetime.now)
     doc_type = db.Column(db.String(255))
-    file_attachment = db.Column(db.String(500), nullable=True)
     # Foreign Key to Link Users (refer to primary key of the user)
     poster_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     

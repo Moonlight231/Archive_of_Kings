@@ -70,9 +70,9 @@
           Upload study materials to help other students learn.<br />You'll be able to have free access for sharing your materials.
         </p>
         {%if current_user.is_authenticated%}
-        <a href="{{url_for('add_post')}}" class="hero-btn">UPLOAD</a>
-        {%else%}
         <a href="{{url_for('add_user')}}" class="hero-btn">JOIN US</a>
+        {%else%}
+        <a href="{{url_for('posts')}}" class="hero-btn">VISIT ARCHIVE</a>
         {%endif%}
         
       </div>
