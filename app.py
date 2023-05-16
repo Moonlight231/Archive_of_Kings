@@ -260,7 +260,7 @@ def add_post():
         flash("Post Submitted Successfully!")
         
     # Redirect to the webpage
-    return render_template("add_post.html", form=form)
+    return render_template("post.html", form=form)
     
 
 # Json Thing
