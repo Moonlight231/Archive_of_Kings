@@ -58,9 +58,10 @@
 
     <h2><em>Shared Materials:</em></h2><br/>
 
-    {%for post in posts [::-1]%}
+    {%for post in posts [::-1] if post.poster_id == id.id%}
     
-    {%if post.poster_id==id.id%}
+   
+    
 
       <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
 
@@ -79,7 +80,7 @@
           <a href="{{url_for('delete_post', id=post.id)}}" class="btn btn-outline-danger btn-sm">Delete</a>
       {%endif%}
 
-    {%endif%}
+
 
 
 
