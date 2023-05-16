@@ -47,8 +47,8 @@
       
             <div class="col-md-10">
               <div class="card-body">
-                <h5 class="card-title">
-                  {{ post.poster.name }}
+                
+                <h5 class="card-title"><a href="{{url_for('profile', id=post.poster_id)}}" class="link-secondary" style="text-decoration: none" >{{ post.poster.name }}</a>
                 </h5>
                 <p class="card-text">
                   {% if post.poster.bio %}

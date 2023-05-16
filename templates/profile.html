@@ -11,13 +11,11 @@
   </div>
 {%endfor%}
 
-
-
-    <h1>Dashboard</h1>
+    <h1>Profile</h1>
     <br/>
 
     <div class="card">
-        <h4 class="card-header text-light">{{current_user.name}}</h4>
+        <h4 class="card-header text-light">{{id.name}}</h4>
         <div class="card-body">
           <!--<h5 class="card-title text-secondary">Welcome To Your Dashboard!</h5> -->
           <p class="card-text">
@@ -26,26 +24,22 @@
             <div class="row">  
                 <div class="col-8">     
             
-            <strong>Name: </strong>{{current_user.name}}<br/>
-            <strong>Username: </strong>{{current_user.username}}<br/>
-            <strong>User Id: </strong>{{current_user.id}}<br/>
-            <strong>Email: </strong>{{current_user.email}}<br/>
-            <strong>Program: </strong>{{current_user.program}}<br/>
-            <strong>Date Joined: </strong>{{current_user.date_added}}<br/>
+            <strong>Name: </strong>{{id.name}}<br/>
+            <strong>Username: </strong>{{id.username}}<br/>
+            <strong>User Id: </strong>{{id.id}}<br/>
+            <strong>Email: </strong>{{id.email}}<br/>
+            <strong>Program: </strong>{{id.program}}<br/>
+            <strong>Date Joined: </strong>{{id.date_added}}<br/>
             <br/>
-            <strong>Bio: </strong>{{current_user.bio}}<br/><br/>
+            <strong>Bio: </strong>{{id.bio}}
         </p>
-          <a href="{{url_for('logout')}}" class="btn btn-secondary btn-sm">Logout</a>
-          <a href="{{url_for('update', id=current_user.id)}}"class="btn btn-warning btn-sm">Update Profile</a>
-          <a href="{{url_for('delete', id=current_user.id)}}" class="btn btn-danger btn-sm">Delete</a>
-          <br/>
 
           
         </div>
       <div class="col-4">
-          {%if current_user.profile_pic%}
+          {%if id.profile_pic%}
           
-          <img src="{{url_for('static', filename = 'images/' + current_user.profile_pic)}}" width=175 align="right">
+          <img src="{{url_for('static', filename = 'images/' + id.profile_pic)}}" width=175 align="right">
   
           {%else%}
 
@@ -61,11 +55,12 @@
 
     <br/><br/>
 
-<div class="container">
+
     <h2><em>Shared Materials:</em></h2><br/>
-{%for post in posts[::-1]%}
+
+    {%for post in posts [::-1]%}
     
-    {%if post.poster_id==current_user.id%}
+    {%if post.poster_id==id.id%}
 
       <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
 
@@ -96,6 +91,6 @@
 
 {%endfor%}
 
-</div>
+
     
 {% endblock %}

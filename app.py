@@ -65,8 +65,9 @@ def base():
 @login_required
 def admin():
     id = current_user.id
+    our_users = Users.query.order_by(Users.date_added)
     if id == 19:
-        return render_template("admin.html")
+        return render_template("admin.html", our_users=our_users)
     else:
         flash("You must be the Admin to access this page!")
         return redirect(url_for('dashboard'))
@@ -106,9 +107,9 @@ def login():
                 flash("Logged in Successfully!")
                 return redirect(url_for('dashboard'))
             else:
-                flash("Wrong Password! Try Again. ")
+                flash("Invalid Password. Please Try Again. ")
         else:
-            flash("That User Doesn't Exist! Try Again.")
+            flash("Account Doesn't Exist! Please Try again.")
     return render_template('login.html', form=form)
 
 # Create Logout Function
@@ -125,6 +126,15 @@ def logout():
 def dashboard():
     posts = Posts.query.order_by(Posts.date_posted)
     return render_template('dashboard.html', posts=posts)
+
+# Create Profile Page
+@app.route('/profile/<int:id>', methods=['GET', 'POST'])
+@login_required
+def profile(id):
+    id = Users.query.get_or_404(id)
+    posts = Posts.query.order_by(Posts.date_posted)
+    
+    return render_template('profile.html', posts=posts, id=id)
 
 
 @app.route('/posts/delete/<int:id>')
@@ -272,7 +282,7 @@ def download(file):
 @app.route('/delete/<int:id>')
 @login_required
 def delete(id):
-    if id == current_user.id:
+    if id == current_user.id or current_user.id == 19:
         user_to_delete = Users.query.get_or_404(id)
         name = None
         form = UserForm()
@@ -280,15 +290,21 @@ def delete(id):
         try:
             db.session.delete(user_to_delete)
             db.session.commit()
-            flash("User Deleted Successfully!")
-            our_users = Users.query.order_by(Users.date_added)
-            return render_template("add_user.html", form=form, name=name, our_users=our_users)
+            if id == current_user.id:
+                flash("Account Deleted Successfully!")
+                return render_template("add_user.html", form=form, name=name)
+            if current_user.id == 19:
+                our_users = Users.query.order_by(Users.date_added)
+                return render_template("admin.html", form=form, name=name, our_users=our_users)
         except:
-            flash("Whoops! There was a problem deleting user, try again...")
+            flash("Whoops! There was a problem deleting this account, try again...")
             return render_template("add_user.html", form=form, name=name, our_users=our_users)
+        
     else: 
-        flash("You are not authorized to delete that user!")
+        flash("You are not authorized to delete that account!")
         return redirect(url_for('dashboard'))
+    
+    
 
 
 # Update Database Record
@@ -297,6 +313,7 @@ def delete(id):
 def update(id):
     form = UserForm()
     name_to_update = Users.query.get_or_404(id)
+    posts = Posts.query.order_by(Posts.date_posted)
     if request.method == "POST":
         name_to_update.name = request.form['name']
         name_to_update.email = request.form['email']
@@ -323,7 +340,7 @@ def update(id):
             try:
                 db.session.commit()
                 saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
-                flash("User Updated Successfully!")
+                flash("Profile Updated Successfully!")
                 return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id, posts=posts)
             except:
                 flash("Error! Looks like there was a problem... Try Again.")
@@ -331,7 +348,7 @@ def update(id):
             
         else:
             db.session.commit()
-            flash("User Updated Successfully!")
+            flash("Profile Updated Successfully!")
             return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id, posts=posts)
     else:
         return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
