@@ -452,6 +452,7 @@ def add_user():
         else:
             flash("Email or Username already exist! Please Try Again.")
             form.email.data = ''
+            form.username.data = ''
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", form=form, name=name, our_users=our_users)
 
@@ -470,7 +471,7 @@ class Posts(db.Model):
     
 
 
-#Create Model
+# Create User Model
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
@@ -480,7 +481,7 @@ class Users(db.Model, UserMixin):
     bio = db.Column(db.Text(500), nullable=True)
     date_added = db.Column(db.DateTime, default=datetime.now)
     profile_pic = db.Column(db.String(500), nullable=True)
-    # Do some password stuff!
+    # Save hashed password instead of password itself
     password_hash = db.Column(db.String((128)))
     # User can have many posts
     posts = db.relationship('Posts', backref='poster')
